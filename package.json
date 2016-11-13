@@ -1,0 +1,28 @@
+{
+  "name": "blynk-weather",
+  "version": "1.0.0",
+  "description": "An API to access the climate data on the Blynk Board.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "express": "^4.14.0",
+    "request": "^2.72.0",
+    "mongoose": "4.6.6",
+    "node-uuid": "^1.4.7",
+    "promise": "^7.1.1"
+  },
+  "engines": {
+    "node": "4.4.7"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+  }
+}
