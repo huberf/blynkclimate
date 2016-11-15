@@ -11,6 +11,17 @@ const url_head = 'http://blynk-cloud.com/'
 const auth_token = 'project_auth_token';
 // Put V5 to default to fahrenheit and V6 to default to Celsius
 const default_temp = 'V5';
+const db_on = true;
+
+
+// Setup optional database utilities
+if (db_on) {
+  var mongoose = require('mongoose');
+  var alertSchema = new mongoose.Schema({
+    id: String,
+    maxVal: Number,
+    pin: String
+  });
 
 
 app.use(bodyParser.json())
