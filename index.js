@@ -22,6 +22,7 @@ if (db_on) {
     maxVal: Number,
     pin: String
   });
+}
 
 
 app.use(bodyParser.json())
