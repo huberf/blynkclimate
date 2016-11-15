@@ -12,6 +12,7 @@ climate around your Blynk board.
 2. cd blynkclimate
 3. Modify your environment variables (e.g. ~/.bash_profile for Mac users)
 4. npm install && npm start
+
 #### Heroku
 1. git clone https://github.com/huberf/blynkclimate
 2. cd blynkclimate
