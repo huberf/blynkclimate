@@ -8,7 +8,7 @@ const r = require('request');
 const url_head = 'http://blynk-cloud.com/'
 
 // Configuration
-const auth_token = 'project_auth_token';
+const auth_token = process.env.BLYNK_AUTH;
 // Put V5 to default to fahrenheit and V6 to default to Celsius
 const default_temp = 'V5';
 const db_on = true;
@@ -22,6 +22,8 @@ if (db_on) {
     maxVal: Number,
     pin: String
   });
+  const Alert = mongoose.model('Alert', alertSchema);
+  const db = mongoose.connect(process.env.WEATHER_DB_URL);
 }
 
 
