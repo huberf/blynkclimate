@@ -13,6 +13,15 @@ const auth_token = process.env.BLYNK_AUTH;
 const default_temp = 'V5';
 const db_on = true;
 
+var grabData = (id, pin) => {
+  r.get(`${url_head}${id}/get/${pin}`, (err, httpResponse, body) => {
+    if (!err) {
+      res.send(JSON.parse(body)[0]);
+    } else {
+      res.send({ status: 'offline' });
+    }
+  });
+}
 
 // Setup optional database utilities
 if (db_on) {
@@ -24,6 +33,18 @@ if (db_on) {
   });
   const Alert = mongoose.model('Alert', alertSchema);
   const db = mongoose.connect(process.env.WEATHER_DB_URL);
+  var checkAlerts = () => {
+    Alert.find({}, (err, alerts) => {
+      alerts.forEach((alert, index) => {
+        var response = grabData(alert.id, alert.pin);
+        if(response > maxVal) {
+          console.log('Will send out alert once this is actually setup');
+        }
+      });
+    });
+    setTimeout(() => checkAlerts(), 5000);
+  }
+  checkAlerts();
 }
 
 
