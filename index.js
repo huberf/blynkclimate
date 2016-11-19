@@ -79,7 +79,7 @@ app.get('/api/v1/temperature', (req, res) => {
       res.send({ status: 'offline' });
     }
   });
-});
+});pin
 
 app.get('/api/v1/temperature/:type', (req, res) => {
   console.log('Temperature request received');
@@ -97,6 +97,17 @@ app.get('/api/v1/temperature/:type', (req, res) => {
       res.send({ status: 'offline' });
     }
   });
+});
+
+app.post('/api/v1/alert/add', (req, res) => {
+  if (db_on) {
+    var alertObject = { id: req.body.id, maxVal: req.body.maxVal, pin: req.body.pin };
+    var newAlert = new Alert(alertObject);
+    newAlert.save();
+    res.send({ active: true, success: true });
+  } else {
+    res.send({ active: false });
+  }
 });
 
 httpMod.createServer(app).listen(process.env.PORT || 3000)
