@@ -13,6 +13,20 @@ const auth_token = process.env.BLYNK_AUTH;
 const default_temp = 'V5';
 const db_on = true;
 
+var grabData = (token, pin) => {
+  return new Promise((fulfill, reject) => {
+    r.get(`${url_head}${token}/get/${pin}`, (err, httpResponse, body) => {
+      console.log(`Data about pin ${pin} has been received.`);
+      if (!err) {
+        return(JSON.parse(body)[0]);
+      } else {
+        console.log('An error has occured');
+        console.log(err);
+        return null;
+      }
+    });
+  });
+}
 
 // Setup optional database utilities
 if (db_on) {
@@ -36,27 +50,19 @@ app.get('/', (req, res) => {
   res.send({ status: 'online' });
 })
 
+// Personal API
+
 app.get('/api/v1/humidity', (req, res) => {
   console.log('Humidity request received');
-  r.get(`${url_head}${auth_token}/get/V7`, (err, httpResponse, body) => {
-    console.log('Humidity data received');
-    if (!err) {
-      res.send(JSON.parse(body)[0]);
-    } else {
-      res.send({ status: 'offline' });
-    }
+  grabData(auth_token, 'V7').then((data) => {
+    res.send(data);
   });
 });
 
 app.get('/api/v1/temperature', (req, res) => {
   console.log('Temperature request received');
-  r.get(`${url_head}${auth_token}/get/${default_temp}`, (err, httpResponse, body) => {
-    console.log('Temperature data received');
-    if (!err) {
-      res.send(JSON.parse(body)[0]);
-    } else {
-      res.send({ status: 'offline' });
-    }
+  grabData(auth_token, default_temp).then((data) => {
+    res.send(data);
   });
 });
 
@@ -68,13 +74,37 @@ app.get('/api/v1/temperature/:type', (req, res) => {
   } else if(req.params.type == 'c' || req.params.type == 'celsius') {
     pin = 'V6';
   }
-  r.get(`${url_head}${auth_token}/get/${pin}`, (err, httpResponse, body) => {
-    console.log('Temperature data received');
-    if (!err) {
-      res.send(JSON.parse(body)[0]);
-    } else {
-      res.send({ status: 'offline' });
-    }
+  grabData(auth_token, pin).then((data) => {
+    res.send(data);
+  });
+});
+
+// Public API
+
+app.get('/api/v1/:token/humidity', (req, res) => {
+  console.log('Humidity request received');
+  grabData(req.params.token, 'V7').then((data) => {
+    res.send(data);
+  });
+});
+
+app.get('/api/v1/:token/temperature', (req, res) => {
+  console.log('Temperature request received');
+  grabData(req.params.token, default_temp).then((data) => {
+    res.send(data);
+  });
+});
+
+app.get('/api/v1/:token/temperature/:type', (req, res) => {
+  console.log('Temperature request received');
+  var pin = 'V5';
+  if (req.params.type == 'f' || req.params.type == 'fahrenheit') {
+    pin = 'V5';
+  } else if(req.params.type == 'c' || req.params.type == 'celsius') {
+    pin = 'V6';
+  }
+  grabData(req.params.token, pin).then((data) => {
+    res.send(data);
   });
 });
 
