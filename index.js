@@ -18,11 +18,11 @@ var grabData = (token, pin) => {
     r.get(`${url_head}${token}/get/${pin}`, (err, httpResponse, body) => {
       console.log(`Data about pin ${pin} has been received.`);
       if (!err) {
-        return(JSON.parse(body)[0]);
+        fulfill(JSON.parse(body)[0]);
       } else {
         console.log('An error has occured');
         console.log(err);
-        return null;
+        fulfill(null);
       }
     });
   });
@@ -77,7 +77,7 @@ app.get('/api/v1/temperature', (req, res) => {
   grabData(auth_token, default_temp).then((data) => {
     res.send(data);
   });
-});pin
+});
 
 app.get('/api/v1/temperature/:type', (req, res) => {
   console.log('Temperature request received');
