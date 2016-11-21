@@ -38,6 +38,19 @@ if (db_on) {
   });
   const Alert = mongoose.model('Alert', alertSchema);
   const db = mongoose.connect(process.env.WEATHER_DB_URL);
+  var checkAlerts = () => {
+    Alert.find({}, (err, alerts) => {
+      alerts.forEach((alert, index) => {
+        grabData(alert.id, alert.pin).then((response) => {
+          if(response > maxVal) {
+            console.log('Will send out alert once this is actually setup');
+          }
+        });
+      });
+    });
+    setTimeout(() => checkAlerts(), 5000);
+  }
+  checkAlerts();
 }
 
 
@@ -64,7 +77,7 @@ app.get('/api/v1/temperature', (req, res) => {
   grabData(auth_token, default_temp).then((data) => {
     res.send(data);
   });
-});
+});pin
 
 app.get('/api/v1/temperature/:type', (req, res) => {
   console.log('Temperature request received');
@@ -106,6 +119,17 @@ app.get('/api/v1/:token/temperature/:type', (req, res) => {
   grabData(req.params.token, pin).then((data) => {
     res.send(data);
   });
+});
+
+app.post('/api/v1/alert/add', (req, res) => {
+  if (db_on) {
+    var alertObject = { id: req.body.id, maxVal: req.body.maxVal, pin: req.body.pin };
+    var newAlert = new Alert(alertObject);
+    newAlert.save();
+    res.send({ active: true, success: true });
+  } else {
+    res.send({ active: false });
+  }
 });
 
 httpMod.createServer(app).listen(process.env.PORT || 3000)
