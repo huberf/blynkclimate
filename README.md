@@ -6,6 +6,9 @@ The Blynk Board is a powerful device for home automation, and this project
 allows you to build a powerful API for accessing the current status of the
 climate around your Blynk board.
 
+This project can be demoed and the public API can be accessed for no charge at
+https://blynkweather.herokuapp.com/
+
 ### Setup
 #### Local
 1. git clone https://github.com/huberf/blynkclimate
