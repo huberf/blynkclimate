@@ -4,7 +4,10 @@
 
 The Blynk Board is a powerful device for home automation, and this project
 allows you to build a powerful API for accessing the current status of the
-climate around your Blynk board.
+climate around your Blynk board, while also alerting you when values exceed
+thresholds. Have a certain corner in your home that has a narrow set of
+operating conditions. Place a Blynk board there and set it up with this server.
+You can easily get push notifications through IFTTT or another similar service.
 
 This project can be demoed and the public API can be accessed for no charge at
 https://blynkweather.herokuapp.com/
@@ -29,3 +32,4 @@ https://blynkweather.herokuapp.com/
   depending upon the default value.
 * /api/v1/temperature/:type - Replace type with 'c', 'f', 'celsius', or
   'fahrenheit' depending upon the format you want.
+* /api/v1/alert/add - Send a JSON body with the following template {id, maxVal, pin, alertUrl} replacing id with your Blynk bloard's project auth token.
