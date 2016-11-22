@@ -34,7 +34,8 @@ if (db_on) {
   var alertSchema = new mongoose.Schema({
     id: String,
     maxVal: Number,
-    pin: String
+    pin: String,
+    alertUrl: String,
   });
   const Alert = mongoose.model('Alert', alertSchema);
   const db = mongoose.connect(process.env.WEATHER_DB_URL);
@@ -43,7 +44,8 @@ if (db_on) {
       alerts.forEach((alert, index) => {
         grabData(alert.id, alert.pin).then((response) => {
           if(response > maxVal) {
-            console.log('Will send out alert once this is actually setup');
+            // Ping URL to notify
+            r.get(alert.alertUrl);
           }
         });
       });
@@ -123,7 +125,12 @@ app.get('/api/v1/:token/temperature/:type', (req, res) => {
 
 app.post('/api/v1/alert/add', (req, res) => {
   if (db_on) {
-    var alertObject = { id: req.body.id, maxVal: req.body.maxVal, pin: req.body.pin };
+    var alertObject = {
+      id: req.body.id,
+      maxVal: req.body.maxVal,
+      pin: req.body.pin,
+      alertUrl: req.body.alertUrl,
+    };
     var newAlert = new Alert(alertObject);
     newAlert.save();
     res.send({ active: true, success: true });
