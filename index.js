@@ -46,8 +46,10 @@ if (db_on) {
         grabData(alert.id, alert.pin).then((response) => {
           if(response > alert.threshold && alert.max) {
             // Ping URL to notify
+            console.log('Pinging URl');
             r.get(alert.alertUrl);
           } else if(response < alert.threshold && !alert.max) {
+            console.log('Pinging URl');
             r.get(alert.alertUrl);
           }
         });
