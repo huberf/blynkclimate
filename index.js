@@ -34,7 +34,7 @@ if (db_on) {
   var alertSchema = new mongoose.Schema({
     id: String,
     threshold: Number,
-    max: true,
+    max: Boolean,
     pin: String,
     alertUrl: String,
   });
