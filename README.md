@@ -32,4 +32,6 @@ https://blynkweather.herokuapp.com/
   depending upon the default value.
 * /api/v1/temperature/:type - Replace type with 'c', 'f', 'celsius', or
   'fahrenheit' depending upon the format you want.
-* /api/v1/alert/add - Send a JSON body with the following template {id, maxVal, pin, alertUrl} replacing id with your Blynk bloard's project auth token.
+* /api/v1/alert/add - Send a JSON body with the following template {id, 
+  threshold, max, pin, alertUrl} replacing id with your Blynk bloard's project
+  auth token.

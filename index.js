@@ -33,7 +33,8 @@ if (db_on) {
   var mongoose = require('mongoose');
   var alertSchema = new mongoose.Schema({
     id: String,
-    maxVal: Number,
+    threshold: Number,
+    max: true,
     pin: String,
     alertUrl: String,
   });
@@ -43,8 +44,10 @@ if (db_on) {
     Alert.find({}, (err, alerts) => {
       alerts.forEach((alert, index) => {
         grabData(alert.id, alert.pin).then((response) => {
-          if(response > maxVal) {
+          if(response > alert.threshold && alert.max) {
             // Ping URL to notify
+            r.get(alert.alertUrl);
+          } else if(response < alert.threshold && !alert.max) {
             r.get(alert.alertUrl);
           }
         });
@@ -127,7 +130,8 @@ app.post('/api/v1/alert/add', (req, res) => {
   if (db_on) {
     var alertObject = {
       id: req.body.id,
-      maxVal: req.body.maxVal,
+      threshold: req.body.threshold,
+      max: req.body.max,
       pin: req.body.pin,
       alertUrl: req.body.alertUrl,
     };
