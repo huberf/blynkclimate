@@ -145,5 +145,15 @@ app.post('/api/v1/alert/add', (req, res) => {
   }
 });
 
+app.post('/api/v1/alert/remove', (req, res) => {
+  if (db_on) {
+    Alert.find({/*criteria*/}, (err, alerts) => {
+      if (alerts[0] && alerts.length == 1) {
+        // Remove alert
+      }
+    });
+  }
+});
+
 httpMod.createServer(app).listen(process.env.PORT || 3000)
 console.log(`Weather server live at port ${process.env.PORT || 3000}`);
