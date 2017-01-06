@@ -1,4 +1,5 @@
 var httpMod = require('http')
+var uuid = require('node-uuid');
 var bodyParser = require('body-parser')
 var express = require('express');
 var app = express();
@@ -33,6 +34,7 @@ if (db_on) {
   var mongoose = require('mongoose');
   var alertSchema = new mongoose.Schema({
     id: String,
+    uuid: String,
     threshold: Number,
     max: Boolean,
     pin: String,
@@ -130,8 +132,10 @@ app.get('/api/v1/:token/temperature/:type', (req, res) => {
 
 app.post('/api/v1/alert/add', (req, res) => {
   if (db_on) {
+    var alertId = uuid.v4();
     var alertObject = {
       id: req.body.id,
+      uuid: alertId,
       threshold: req.body.threshold,
       max: req.body.max,
       pin: req.body.pin,
@@ -139,7 +143,7 @@ app.post('/api/v1/alert/add', (req, res) => {
     };
     var newAlert = new Alert(alertObject);
     newAlert.save();
-    res.send({ active: true, success: true });
+    res.send({ active: true, success: true, uuid: alertId });
   } else {
     res.send({ active: false });
   }
@@ -147,9 +151,12 @@ app.post('/api/v1/alert/add', (req, res) => {
 
 app.post('/api/v1/alert/remove', (req, res) => {
   if (db_on) {
-    Alert.find({/*criteria*/}, (err, alerts) => {
+    Alert.find({uuid: req.body.uuid}, (err, alerts) => {
       if (alerts[0] && alerts.length == 1) {
-        // Remove alert
+        alerts.remove();
+        res.send({ success: true });
+      } else {
+        res.send({ success: false });
       }
     });
   }
